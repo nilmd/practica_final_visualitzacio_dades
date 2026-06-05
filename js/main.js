@@ -11,9 +11,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     const filtered = Filters.apply(appData.plants);
     Treemap.createTreemap(filtered);
     MapModule.createMap(filtered);
+    Insights.render(appData);
 
     // subscribe to filter changes
-    Filters.subscribe((state) => {
+    Filters.subscribe(() => {
       const f = Filters.apply(appData.plants);
       Treemap.createTreemap(f);
       MapModule.updateMap(f);
@@ -27,18 +28,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 function renderFilterControls(plants) {
-  // populate countries
-  const countrySel = document.getElementById("filter-country");
   const fuelSel = document.getElementById("filter-fuel");
   const minCap = document.getElementById("filter-min-cap");
-  const search = document.getElementById("filter-search");
-
-  const countries = Array.from(
-    new Set(plants.map((p) => p.country).filter(Boolean)),
-  ).sort();
-  countrySel.innerHTML =
-    "<option>All</option>" +
-    countries.map((c) => `<option>${c}</option>`).join("");
+  const minCapValue = document.getElementById("filter-min-cap-value");
 
   const fuels = Array.from(
     new Set(plants.map((p) => p.primary_fuel).filter(Boolean)),
@@ -46,18 +38,12 @@ function renderFilterControls(plants) {
   fuelSel.innerHTML =
     "<option>All</option>" + fuels.map((f) => `<option>${f}</option>`).join("");
 
-  countrySel.addEventListener("change", () =>
-    Filters.set({
-      country: countrySel.value === "All" ? null : countrySel.value,
-    }),
-  );
   fuelSel.addEventListener("change", () =>
     Filters.set({ fuel: fuelSel.value === "All" ? null : fuelSel.value }),
   );
-  minCap.addEventListener("input", () =>
-    Filters.set({ minCapacity: minCap.value ? +minCap.value : null }),
-  );
-  search.addEventListener("input", () =>
-    Filters.set({ search: search.value ? search.value : null }),
-  );
+  minCap.addEventListener("input", () => {
+    const value = minCap.value ? +minCap.value : null;
+    if (minCapValue) minCapValue.textContent = `${value || 0} MW`;
+    Filters.set({ minCapacity: value });
+  });
 }

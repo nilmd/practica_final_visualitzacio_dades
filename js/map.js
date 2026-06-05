@@ -26,27 +26,26 @@ const MapModule = (function () {
       { type: "Sphere" },
     );
     const path = d3.geoPath(projection);
+    const zoomGroup = svg.append("g");
 
-    svg
+    zoomGroup
       .append("path")
       .datum({ type: "Sphere" })
       .attr("d", path)
-      .attr("fill", "#091018")
-      .attr("stroke", "#2b3a45")
+      .attr("fill", "#f3f2ed")
+      .attr("stroke", "rgba(17,17,17,0.25)")
       .attr("stroke-width", 1.2);
 
     const graticule = d3.geoGraticule10();
-    svg
+    zoomGroup
       .append("path")
       .datum(graticule)
       .attr("d", path)
       .attr("fill", "none")
-      .attr("stroke", "rgba(255,255,255,0.08)")
+      .attr("stroke", "rgba(17,17,17,0.08)")
       .attr("stroke-width", 0.6);
 
-    const fuels = valid.map((p) => p.primary_fuel || "Unknown");
-    const uniqueFuels = Array.from(new Set(fuels));
-    const colorScale = d3.scaleOrdinal(d3.schemeTableau10).domain(uniqueFuels);
+    const colorMap = (window.appData && window.appData.fuelColors) || {};
 
     const tooltip = container
       .append("div")
@@ -54,17 +53,17 @@ const MapModule = (function () {
       .style("position", "absolute")
       .style("pointer-events", "none")
       .style("opacity", 0)
-      .style("background", "rgba(8, 12, 16, 0.96)")
-      .style("border", "1px solid rgba(255,255,255,0.12)")
+      .style("background", "rgba(255, 255, 255, 0.96)")
+      .style("border", "1px solid rgba(17,17,17,0.12)")
       .style("border-radius", "8px")
       .style("padding", "10px 12px")
-      .style("color", "#e8eef3")
+      .style("color", "#111111")
       .style("font-size", "0.88rem")
       .style("line-height", 1.4)
-      .style("box-shadow", "0 10px 30px rgba(0,0,0,0.35)");
+      .style("box-shadow", "0 10px 30px rgba(0,0,0,0.18)");
 
-    const pointsGroup = svg.append("g");
-    const points = pointsGroup
+    const pointsGroup = zoomGroup.append("g");
+    pointsGroup
       .selectAll("circle")
       .data(valid)
       .join("circle")
@@ -76,9 +75,9 @@ const MapModule = (function () {
           Math.log10((isNaN(d.capacity_mw) ? 1 : +d.capacity_mw) + 1) * 0.9,
         ),
       )
-      .attr("fill", (d) => colorScale(d.primary_fuel || "Unknown"))
+      .attr("fill", (d) => colorMap[d.primary_fuel || "Unknown"] || "#adb5bd")
       .attr("fill-opacity", 0.78)
-      .attr("stroke", "rgba(255,255,255,0.5)")
+      .attr("stroke", "rgba(17,17,17,0.35)")
       .attr("stroke-width", 0.4)
       .append("title")
       .text((d) => {
@@ -105,6 +104,15 @@ const MapModule = (function () {
         tooltip.style("opacity", 0);
         d3.select(this).attr("stroke-width", 0.4).attr("fill-opacity", 0.78);
       });
+
+    svg.call(
+      d3
+        .zoom()
+        .scaleExtent([1, 8])
+        .on("zoom", (event) => {
+          zoomGroup.attr("transform", event.transform);
+        }),
+    );
 
     return svg.node();
   }

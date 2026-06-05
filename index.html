@@ -4,6 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Who Generates the World's Electricity?</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -11,74 +17,107 @@
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
-    <main class="container-fluid p-0">
+    <header class="site-header">
+      <div class="container-xl header-inner">
+        <div>
+          <div class="eyebrow">Pràctica final · Visualització de dades</div>
+          <div class="site-title">Who Generates the World's Electricity?</div>
+        </div>
+        <nav class="site-nav" aria-label="Navegació principal">
+          <a href="#hero">Inici</a>
+          <a href="#treemap-section">Mescla</a>
+          <a href="#map-section">Geografia</a>
+          <a href="#conclusions-section">Conclusions</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
       <!-- SECTION 1: HERO -->
-      <section
-        id="hero"
-        class="vh-100 d-flex align-items-center justify-content-center text-center text-light"
-      >
-        <div class="container">
-          <h1 class="display-4">Qui genera l'electricitat del món?</h1>
-          <p class="lead">
-            Explora la infraestructura darrere de la generació elèctrica global.
+      <section id="hero" class="story-section hero-section">
+        <div class="container-xl story-shell">
+          <p class="section-kicker">01 · Introducció</p>
+          <h1>Qui genera l'electricitat del món?</h1>
+          <p class="section-lead">
+            Una història visual sobre l'escala, la geografia i la diversitat de
+            la infraestructura elèctrica global.
           </p>
-          <div id="kpi-cards" class="row mt-4 g-3 justify-content-center"></div>
+          <div id="kpi-cards" class="kpi-grid" aria-live="polite"></div>
         </div>
       </section>
 
       <!-- SECTION 2: TREEMAP -->
-      <section id="treemap-section" class="py-5 bg-dark text-light">
-        <div class="container">
-          <h2>Mescla energètica global</h2>
+      <section id="treemap-section" class="story-section">
+        <div class="container-xl story-shell">
+          <p class="section-kicker">02 · Mescla energètica</p>
+          <h2>Què alimenta el món?</h2>
+          <p class="section-lead">
+            La generació elèctrica global no es reparteix de manera uniforme:
+            unes poques tecnologies concentren la major part de la capacitat.
+          </p>
 
-          <!-- Filters Bar -->
-          <div id="filters-bar" class="mb-4 row g-2 align-items-center">
-            <div class="col-12 col-md-3">
-              <label class="form-label">País</label>
-              <select id="filter-country" class="form-select"></select>
-            </div>
-            <div class="col-12 col-md-3">
-              <label class="form-label">Combustible</label>
-              <select id="filter-fuel" class="form-select"></select>
-            </div>
-            <div class="col-12 col-md-3">
-              <label class="form-label">Capacitat (MW) mínima</label>
-              <input
-                id="filter-min-cap"
-                type="number"
-                class="form-control"
-                placeholder="0"
-              />
-            </div>
-            <div class="col-12 col-md-3">
-              <label class="form-label">Cerca planta</label>
-              <input
-                id="filter-search"
-                type="search"
-                class="form-control"
-                placeholder="Cerca per nom de planta"
-              />
-            </div>
+          <div class="story-panel">
+            <div id="treemap" class="viz-panel viz-panel--large"></div>
+            <div
+              id="treemap-insight"
+              class="supporting-insight"
+              aria-live="polite"
+            ></div>
           </div>
-
-          <div id="treemap" style="height: 600px"></div>
         </div>
       </section>
 
       <!-- SECTION 3: MAP -->
-      <section id="map-section" class="py-5 bg-dark text-light">
-        <div class="container">
-          <h2>Mapa de plantes</h2>
+      <section id="map-section" class="story-section story-section--tight">
+        <div class="container-xl story-shell">
+          <p class="section-kicker">03 · Geografia</p>
+          <h2>On es troba aquesta infraestructura?</h2>
+          <p class="section-lead">
+            El mapa mostra la distribució global de les plantes i permet
+            explorar la relació entre fuel i capacitat instal·lada.
+          </p>
+
+          <div class="filters-strip" id="filters-bar">
+            <label class="field">
+              <span>Combustible</span>
+              <select id="filter-fuel" class="form-select"></select>
+            </label>
+            <label class="field">
+              <span>Capacitat mínima (MW)</span>
+              <input
+                id="filter-min-cap"
+                type="range"
+                class="form-range"
+                min="0"
+                max="5000"
+                step="25"
+                value="0"
+              />
+            </label>
+            <div class="filter-value" id="filter-min-cap-value">0 MW</div>
+          </div>
+
           <div
             id="map"
-            style="
-              height: 600px;
-              width: 100%;
-              background: var(--card);
-              border-radius: 8px;
-              padding: 8px;
-            "
+            class="viz-panel viz-panel--map"
+            aria-label="Mapa mundial de plantes elèctriques"
           ></div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: CONCLUSIONS -->
+      <section
+        id="conclusions-section"
+        class="story-section conclusions-section"
+      >
+        <div class="container-xl story-shell">
+          <p class="section-kicker">04 · Conclusions</p>
+          <h2>Punts clau</h2>
+          <p class="section-lead">
+            La història acaba amb els patrons més rellevants que emergeixen de
+            les dades.
+          </p>
+          <div id="insights-cards" class="insights-grid"></div>
         </div>
       </section>
     </main>
@@ -94,6 +133,7 @@
     <script src="js/hero.js?v=20260605"></script>
     <script src="js/treemap.js?v=20260605"></script>
     <script src="js/map.js?v=20260605"></script>
+    <script src="js/insights.js?v=20260605"></script>
     <script src="js/main.js?v=20260605"></script>
   </body>
 </html>

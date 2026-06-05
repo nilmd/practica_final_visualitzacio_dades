@@ -1,0 +1,259 @@
+# Product Vision
+
+This project should feel like a modern editorial data experience rather than a traditional analytics dashboard.
+
+Think:
+
+* Apple product pages
+* Airbnb design language
+* Stripe storytelling
+* Our World in Data visual narratives
+
+The experience should be:
+
+* Clean
+* Elegant
+* Focused
+* Data-driven
+* Minimalist
+
+Avoid clutter.
+
+Avoid showing too many charts at once.
+
+Every visualization must answer a specific question.
+
+The user should progressively discover how electricity is generated around the world.
+
+---
+
+# Core Story
+
+The project answers one fundamental question:
+
+**Who generates the world's electricity?**
+
+The narrative should guide users through three progressively deeper insights:
+
+1. What powers the world?
+2. How do countries differ?
+3. Which countries have the most resilient and diversified energy systems?
+
+Every section should contribute to answering these questions.
+
+---
+
+# Design Principles
+
+## Simplicity First
+
+Prioritize clarity over quantity.
+
+Do not create a dashboard full of widgets.
+
+Each section should contain:
+
+* One key question
+* One main visualization
+* One supporting insight
+
+Nothing more.
+
+## Visual Hierarchy
+
+Large typography.
+
+Generous whitespace.
+
+Minimal color palette.
+
+Use color only when it communicates data.
+
+Avoid decorative elements.
+
+## Story Before Exploration
+
+Users should first understand the story.
+
+Only then should they explore the data.
+
+Each section should begin with a narrative statement.
+
+Example:
+
+"Although renewable energy is rapidly expanding, fossil fuels still dominate global electricity infrastructure."
+
+Then reveal the visualization.
+
+---
+
+# User Journey
+
+## Section 1 — Introduction
+
+Question:
+
+What does the global electricity system look like?
+
+Display:
+
+Large KPI cards.
+
+Minimal animation.
+
+Key metrics:
+
+* Power plants
+* Countries
+* Installed capacity
+* Energy sources
+
+The goal is to establish scale.
+
+---
+
+## Section 2 — What Powers the World?
+
+Question:
+
+Which energy sources dominate global electricity generation?
+
+Visualization:
+
+Single treemap.
+
+Purpose:
+
+Show relative importance of each technology.
+
+Supporting text should explain the main takeaway.
+
+The user should immediately understand that not all technologies contribute equally.
+
+---
+
+## Section 3 — Geography of Electricity
+
+Question:
+
+Where are these infrastructures located?
+
+Visualization:
+
+Interactive global map.
+
+This should be the visual centerpiece of the project.
+
+Interaction:
+
+* Zoom
+* Pan
+* Hover
+
+Filters:
+
+* Fuel type
+* Capacity range
+
+Avoid excessive controls.
+
+Focus on discovery.
+
+---
+
+## Section 4 — Different Countries, Different Strategies
+
+Question:
+
+Do countries generate electricity in the same way?
+
+Visualization:
+
+Country comparison tool.
+
+User selects two countries.
+
+Show:
+
+* Capacity distribution by fuel type
+* Renewable share
+* Total installed capacity
+
+The goal is comparison, not exploration.
+
+Keep the interface extremely simple.
+
+---
+
+## Section 5 — Energy Diversity
+
+Question:
+
+Which countries are most dependent on a single technology?
+
+Visualization:
+
+Diversification chart.
+
+Purpose:
+
+Reveal that some countries rely heavily on one energy source while others maintain a balanced portfolio.
+
+This section should introduce the Diversification Index.
+
+Provide a simple explanation.
+
+Avoid statistical jargon.
+
+---
+
+## Section 6 — Key Findings
+
+Final storytelling section.
+
+No charts.
+
+Only insights.
+
+Examples:
+
+* Most diversified country
+* Largest renewable share
+* Largest coal dependency
+* Largest power plant
+* Most common technology
+
+Present them as elegant insight cards.
+
+The project should end with conclusions, not with another visualization.
+
+---
+
+# Dashboard Philosophy
+
+The dashboard is not the product.
+
+The story is the product.
+
+The dashboard exists only to support the story.
+
+Every chart must justify its existence.
+
+If a visualization does not answer one of the core research questions, remove it.
+
+Quality is preferred over quantity.
+
+A small number of excellent visualizations is better than many average ones.
+
+---
+
+# Desired Emotional Outcome
+
+At the end of the experience, users should feel that they have understood:
+
+* How electricity is generated globally.
+* How different countries approach energy production.
+* Why energy diversification matters.
+* The scale and complexity of the world's electricity infrastructure.
+
+The experience should feel informative, modern and professional.

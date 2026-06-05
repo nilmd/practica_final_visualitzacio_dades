@@ -9,6 +9,45 @@ const Preprocessing = (function () {
     "Ocean",
   ]);
 
+  const FUEL_COLORS = {
+    Coal: "#2f3437",
+    Gas: "#3a86ff",
+    Hydro: "#00b4d8",
+    Solar: "#f4c542",
+    Wind: "#2fb344",
+    Nuclear: "#8e44ad",
+    Biomass: "#a26a3d",
+    Oil: "#e76f51",
+    Geothermal: "#c77d2b",
+    Petcoke: "#5b5b5b",
+    Waste: "#8d99ae",
+    Storage: "#6c757d",
+    Cogeneration: "#6d597a",
+    "Wave and Tidal": "#4cc9f0",
+    Other: "#adb5bd",
+    Unknown: "#adb5bd",
+  };
+
+  function normalizeFuel(fuel) {
+    const value = (fuel || "Unknown").trim();
+    if (/solar/i.test(value)) return "Solar";
+    if (/wind/i.test(value)) return "Wind";
+    if (/hydro/i.test(value)) return "Hydro";
+    if (/biomass/i.test(value)) return "Biomass";
+    if (/geotherm/i.test(value)) return "Geothermal";
+    if (/wave|tidal|ocean/i.test(value)) return "Wave and Tidal";
+    if (/nuclear/i.test(value)) return "Nuclear";
+    if (/coal/i.test(value)) return "Coal";
+    if (/gas/i.test(value)) return "Gas";
+    if (/oil/i.test(value)) return "Oil";
+    if (/petcoke/i.test(value)) return "Petcoke";
+    if (/waste/i.test(value)) return "Waste";
+    if (/storage/i.test(value)) return "Storage";
+    if (/cogeneration/i.test(value)) return "Cogeneration";
+    if (/other/i.test(value)) return "Other";
+    return value || "Unknown";
+  }
+
   function isRenewable(fuel) {
     if (!fuel) return false;
     return (
@@ -71,16 +110,62 @@ const Preprocessing = (function () {
     return result;
   }
 
+  function aggregateByFuel(plants) {
+    const totals = new Map();
+    let grandTotal = 0;
+    plants.forEach((plant) => {
+      const fuel = plant.primary_fuel || "Unknown";
+      const cap = isNaN(plant.capacity_mw) ? 0 : plant.capacity_mw;
+      totals.set(fuel, (totals.get(fuel) || 0) + cap);
+      grandTotal += cap;
+    });
+
+    return Array.from(totals.entries())
+      .map(([fuel, total_capacity]) => ({
+        fuel,
+        total_capacity,
+        percentage: grandTotal ? total_capacity / grandTotal : 0,
+      }))
+      .sort((a, b) => b.total_capacity - a.total_capacity);
+  }
+
+  function buildGlobalStats(plants, countries, fuels) {
+    const totalCapacity = plants.reduce(
+      (sum, plant) => sum + (isNaN(plant.capacity_mw) ? 0 : plant.capacity_mw),
+      0,
+    );
+    return {
+      totalPlants: plants.length,
+      totalCountries: countries.length,
+      totalCapacity,
+      totalFuelTypes: fuels.length,
+    };
+  }
+
   function preprocess(plants) {
     // add is_renewable flag
-    plants.forEach((p) => (p.is_renewable = isRenewable(p.primary_fuel)));
+    plants.forEach((p) => {
+      p.primary_fuel = normalizeFuel(p.primary_fuel);
+      p.is_renewable = isRenewable(p.primary_fuel);
+    });
     const countries = aggregateByCountry(plants);
+    const fuels = aggregateByFuel(plants);
+    const globalStats = buildGlobalStats(plants, countries, fuels);
     // store for app
     window.appData = window.appData || {};
     window.appData.plants = plants;
     window.appData.countries = countries;
+    window.appData.fuels = fuels;
+    window.appData.globalStats = globalStats;
+    window.appData.fuelColors = FUEL_COLORS;
     return window.appData;
   }
 
-  return { preprocess, isRenewable, shannonIndex };
+  return {
+    preprocess,
+    isRenewable,
+    shannonIndex,
+    normalizeFuel,
+    aggregateByFuel,
+  };
 })();
