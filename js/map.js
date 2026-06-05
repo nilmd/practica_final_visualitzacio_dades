@@ -1,14 +1,26 @@
 const MapModule = (function () {
-  function createMap(plants) {
+  function createMap(plants, options = {}) {
     const valid = plants.filter(
       (p) => p.latitude != null && p.longitude != null,
     );
+    const yearCutoff = options.yearCutoff == null ? null : +options.yearCutoff;
+    const state = options.state || {};
+    const filtered = Filters.filterPlants(valid, {
+      country_long: state.country_long || "",
+      fuel: state.fuel || "",
+      owner: state.owner || "",
+      minCapacity: state.minCapacity || 0,
+      yearCutoff,
+    });
     const container = d3.select("#map");
     container.selectAll("*").remove();
 
     const bounds = container.node().getBoundingClientRect();
     const width = Math.max(320, bounds.width || 900);
-    const height = Math.max(400, bounds.height || 600);
+    const height = Math.max(
+      280,
+      Math.min(360, Math.round(window.innerHeight * 0.34)),
+    );
 
     const svg = container
       .append("svg")
@@ -65,7 +77,7 @@ const MapModule = (function () {
     const pointsGroup = zoomGroup.append("g");
     pointsGroup
       .selectAll("circle")
-      .data(valid)
+      .data(filtered)
       .join("circle")
       .attr("cx", (d) => projection([d.longitude, d.latitude])[0])
       .attr("cy", (d) => projection([d.longitude, d.latitude])[1])
@@ -82,7 +94,7 @@ const MapModule = (function () {
       .append("title")
       .text((d) => {
         const cap = isNaN(d.capacity_mw) ? 0 : +d.capacity_mw;
-        return `${d.name || "—"}\n${d.country || ""}\n${Math.round(cap).toLocaleString("ca")} MW\n${d.primary_fuel || ""}\n${d.commissioning_year || ""}\n${d.owner || ""}`;
+        return `${d.name || "—"}\n${d.country_long || ""}\n${Math.round(cap).toLocaleString("ca")} MW\n${d.primary_fuel || ""}\n${d.commissioning_year || ""}\n${d.owner || ""}`;
       });
 
     pointsGroup
@@ -92,7 +104,7 @@ const MapModule = (function () {
         tooltip
           .style("opacity", 1)
           .html(
-            `<strong>${d.name || "—"}</strong><br>${d.country || ""}<br>${Math.round(cap).toLocaleString("ca")} MW<br>${d.primary_fuel || ""}<br>${d.commissioning_year || ""}<br>${d.owner || ""}`,
+            `<strong>${d.name || "—"}</strong><br>${d.country_long || ""}<br>${Math.round(cap).toLocaleString("ca")} MW<br>${d.primary_fuel || ""}<br>${d.commissioning_year || ""}<br>${d.owner || ""}`,
           );
         d3.select(this).attr("stroke-width", 1.2).attr("fill-opacity", 1);
       })
@@ -114,12 +126,18 @@ const MapModule = (function () {
         }),
     );
 
+    if (options.yearLabelEl) {
+      options.yearLabelEl.textContent = yearCutoff
+        ? `Fins a ${yearCutoff}`
+        : "Sense animació";
+    }
+
     return svg.node();
   }
 
-  function updateMap(plants) {
+  function updateMap(plants, options = {}) {
     // simply redraw
-    createMap(plants);
+    createMap(plants, options);
   }
 
   return { createMap, updateMap };

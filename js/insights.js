@@ -74,7 +74,9 @@ const Insights = (function () {
   }
 
   function coalShareForCountry(country, plants) {
-    const countryPlants = plants.filter((plant) => plant.country === country);
+    const countryPlants = plants.filter(
+      (plant) => plant.country_long === country,
+    );
     const coal = countryPlants
       .filter((plant) => plant.primary_fuel === "Coal")
       .reduce(

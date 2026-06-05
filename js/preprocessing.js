@@ -1,4 +1,10 @@
 const Preprocessing = (function () {
+  const FUEL_FIELDS = [
+    "primary_fuel",
+    "other_fuel1",
+    "other_fuel2",
+    "other_fuel3",
+  ];
   const RENEWABLES = new Set([
     "Solar",
     "Wind",
@@ -48,6 +54,38 @@ const Preprocessing = (function () {
     return value || "Unknown";
   }
 
+  function normalizeText(value) {
+    return String(value || "").trim();
+  }
+
+  function getPlantFuelValues(plant) {
+    return Array.from(
+      new Set(
+        FUEL_FIELDS.map((field) => normalizeFuel(plant[field])).filter(
+          (fuel) => fuel && fuel !== "Unknown",
+        ),
+      ),
+    );
+  }
+
+  function buildFilterOptions(plants) {
+    const countries = new Set();
+    const owners = new Set();
+    const fuels = new Set();
+
+    plants.forEach((plant) => {
+      countries.add(normalizeText(plant.country_long) || "Unknown");
+      owners.add(normalizeText(plant.owner));
+      getPlantFuelValues(plant).forEach((fuel) => fuels.add(fuel));
+    });
+
+    return {
+      countries: Array.from(countries).filter(Boolean).sort(),
+      owners: Array.from(owners).filter(Boolean).sort(),
+      fuels: Array.from(fuels).filter(Boolean).sort(),
+    };
+  }
+
   function isRenewable(fuel) {
     if (!fuel) return false;
     return (
@@ -67,7 +105,7 @@ const Preprocessing = (function () {
   function aggregateByCountry(plants) {
     const byCountry = new Map();
     plants.forEach((p) => {
-      const c = p.country || "Unknown";
+      const c = p.country_long || "Unknown";
       if (!byCountry.has(c))
         byCountry.set(c, {
           country: c,
@@ -145,7 +183,13 @@ const Preprocessing = (function () {
   function preprocess(plants) {
     // add is_renewable flag
     plants.forEach((p) => {
+      p.country_long =
+        normalizeText(p.country_long) || normalizeText(p.country) || "Unknown";
       p.primary_fuel = normalizeFuel(p.primary_fuel);
+      p.other_fuel1 = normalizeFuel(p.other_fuel1);
+      p.other_fuel2 = normalizeFuel(p.other_fuel2);
+      p.other_fuel3 = normalizeFuel(p.other_fuel3);
+      p.fuel_values = getPlantFuelValues(p);
       p.is_renewable = isRenewable(p.primary_fuel);
     });
     const countries = aggregateByCountry(plants);
@@ -156,6 +200,7 @@ const Preprocessing = (function () {
     window.appData.plants = plants;
     window.appData.countries = countries;
     window.appData.fuels = fuels;
+    window.appData.filterOptions = buildFilterOptions(plants);
     window.appData.globalStats = globalStats;
     window.appData.fuelColors = FUEL_COLORS;
     return window.appData;
@@ -167,5 +212,7 @@ const Preprocessing = (function () {
     shannonIndex,
     normalizeFuel,
     aggregateByFuel,
+    buildFilterOptions,
+    getPlantFuelValues,
   };
 })();

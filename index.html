@@ -14,7 +14,7 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/style.css?v=20260605d" />
   </head>
   <body>
     <header class="site-header">
@@ -47,7 +47,7 @@
       </section>
 
       <!-- SECTION 2: TREEMAP -->
-      <section id="treemap-section" class="story-section">
+      <section id="treemap-section" class="story-section story-section--screen">
         <div class="container-xl story-shell">
           <p class="section-kicker">02 · Mescla energètica</p>
           <h2>Què alimenta el món?</h2>
@@ -56,7 +56,49 @@
             unes poques tecnologies concentren la major part de la capacitat.
           </p>
 
-          <div class="story-panel">
+          <div
+            class="filters-strip filters-strip--treemap"
+            id="treemap-filters"
+          >
+            <label class="field">
+              <span>País</span>
+              <input
+                id="treemap-country-input"
+                class="form-control"
+                type="text"
+                list="treemap-country-options"
+                placeholder="Escriu o tria un país"
+                autocomplete="off"
+              />
+              <datalist id="treemap-country-options"></datalist>
+            </label>
+            <label class="field">
+              <span>Combustible</span>
+              <input
+                id="treemap-fuel-input"
+                class="form-control"
+                type="text"
+                list="treemap-fuel-options"
+                placeholder="Escriu o tria un combustible"
+                autocomplete="off"
+              />
+              <datalist id="treemap-fuel-options"></datalist>
+            </label>
+            <label class="field">
+              <span>Propietari</span>
+              <input
+                id="treemap-owner-input"
+                class="form-control"
+                type="text"
+                list="treemap-owner-options"
+                placeholder="Escriu o tria un propietari"
+                autocomplete="off"
+              />
+              <datalist id="treemap-owner-options"></datalist>
+            </label>
+          </div>
+
+          <div class="story-panel story-panel--full">
             <div id="treemap" class="viz-panel viz-panel--large"></div>
             <div
               id="treemap-insight"
@@ -68,7 +110,10 @@
       </section>
 
       <!-- SECTION 3: MAP -->
-      <section id="map-section" class="story-section story-section--tight">
+      <section
+        id="map-section"
+        class="story-section story-section--screen story-section--tight"
+      >
         <div class="container-xl story-shell">
           <p class="section-kicker">03 · Geografia</p>
           <h2>On es troba aquesta infraestructura?</h2>
@@ -79,10 +124,42 @@
 
           <div class="filters-strip" id="filters-bar">
             <label class="field">
-              <span>Combustible</span>
-              <select id="filter-fuel" class="form-select"></select>
+              <span>País</span>
+              <input
+                id="map-country-input"
+                class="form-control"
+                type="text"
+                list="map-country-options"
+                placeholder="Escriu o tria un país"
+                autocomplete="off"
+              />
+              <datalist id="map-country-options"></datalist>
             </label>
             <label class="field">
+              <span>Combustible</span>
+              <input
+                id="map-fuel-input"
+                class="form-control"
+                type="text"
+                list="map-fuel-options"
+                placeholder="Escriu o tria un combustible"
+                autocomplete="off"
+              />
+              <datalist id="map-fuel-options"></datalist>
+            </label>
+            <label class="field">
+              <span>Propietari</span>
+              <input
+                id="map-owner-input"
+                class="form-control"
+                type="text"
+                list="map-owner-options"
+                placeholder="Escriu o tria un propietari"
+                autocomplete="off"
+              />
+              <datalist id="map-owner-options"></datalist>
+            </label>
+            <label class="field field--wide">
               <span>Capacitat mínima (MW)</span>
               <input
                 id="filter-min-cap"
@@ -94,7 +171,17 @@
                 value="0"
               />
             </label>
+            <button
+              id="map-play-button"
+              class="btn btn-dark map-play-button"
+              type="button"
+            >
+              Play
+            </button>
             <div class="filter-value" id="filter-min-cap-value">0 MW</div>
+            <div class="filter-value filter-value--year" id="map-year-value">
+              Sense animació
+            </div>
           </div>
 
           <div
@@ -127,13 +214,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
     <!-- App scripts -->
-    <script src="js/data-loader.js?v=20260605"></script>
-    <script src="js/preprocessing.js?v=20260605"></script>
-    <script src="js/filters.js?v=20260605"></script>
-    <script src="js/hero.js?v=20260605"></script>
-    <script src="js/treemap.js?v=20260605"></script>
-    <script src="js/map.js?v=20260605"></script>
-    <script src="js/insights.js?v=20260605"></script>
-    <script src="js/main.js?v=20260605"></script>
+    <script src="js/data-loader.js?v=20260605e"></script>
+    <script src="js/preprocessing.js?v=20260605e"></script>
+    <script src="js/filters.js?v=20260605e"></script>
+    <script src="js/hero.js?v=20260605e"></script>
+    <script src="js/treemap.js?v=20260605e"></script>
+    <script src="js/map.js?v=20260605e"></script>
+    <script src="js/insights.js?v=20260605e"></script>
+    <script src="js/main.js?v=20260605e"></script>
   </body>
 </html>

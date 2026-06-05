@@ -1,6 +1,15 @@
 const Treemap = (function () {
-  function createTreemap(plants) {
-    const fuelTotals = Preprocessing.aggregateByFuel(plants);
+  function createTreemap(plants, options = {}) {
+    const state = options.state || {};
+    const filteredPlants = Filters.filterPlants(plants, {
+      country_long: state.country_long || "",
+      fuel: state.fuel || "",
+      owner: state.owner || "",
+      minCapacity: 0,
+      yearCutoff: null,
+    });
+
+    const fuelTotals = Preprocessing.aggregateByFuel(filteredPlants);
     const grandTotal = fuelTotals.reduce(
       (sum, item) => sum + item.total_capacity,
       0,
@@ -13,7 +22,10 @@ const Treemap = (function () {
     const root = { name: "root", children };
 
     const width = document.getElementById("treemap").clientWidth || 1000;
-    const height = 600;
+    const height = Math.max(
+      240,
+      Math.min(320, Math.round(window.innerHeight * 0.28)),
+    );
     d3.select("#treemap").selectAll("*").remove();
     const svg = d3
       .select("#treemap")
@@ -33,9 +45,9 @@ const Treemap = (function () {
       .attr("transform", (d) => `translate(${d.x0},${d.y0})`)
       .style("cursor", "pointer")
       .on("click", (_, d) => {
-        Filters.set({ fuel: d.data.name });
-        const fuelSelect = document.getElementById("filter-fuel");
-        if (fuelSelect) fuelSelect.value = d.data.name;
+        if (typeof options.onFuelSelect === "function") {
+          options.onFuelSelect(d.data.name);
+        }
       });
 
     nodes
@@ -67,9 +79,9 @@ const Treemap = (function () {
         ? (top.total_capacity / grandTotal) * 100
         : 0;
       insight.innerHTML = `
-        <div class="insight-kicker">Supporting insight</div>
-        <div class="insight-title">${top.fuel} dominates the global electricity mix.</div>
-        <div class="insight-copy">${Math.round(top.total_capacity).toLocaleString("ca")} MW, equivalent to ${percentage.toFixed(1)}% of installed capacity in the dataset.</div>
+        <div class="insight-kicker">Insight de suport</div>
+        <div class="insight-title">${top.fuel} domina la mescla energètica filtrada.</div>
+        <div class="insight-copy">${Math.round(top.total_capacity).toLocaleString("ca")} MW, equivalent al ${percentage.toFixed(1)}% de la capacitat mostrada.</div>
       `;
     }
   }
