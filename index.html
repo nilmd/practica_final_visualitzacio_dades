@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ca">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Who Generates the World's Electricity?</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <main class="container-fluid p-0">
+      <!-- SECTION 1: HERO -->
+      <section
+        id="hero"
+        class="vh-100 d-flex align-items-center justify-content-center text-center text-light"
+      >
+        <div class="container">
+          <h1 class="display-4">Qui genera l'electricitat del món?</h1>
+          <p class="lead">
+            Explora la infraestructura darrere de la generació elèctrica global.
+          </p>
+          <div id="kpi-cards" class="row mt-4 g-3 justify-content-center"></div>
+        </div>
+      </section>
+
+      <!-- SECTION 2: TREEMAP -->
+      <section id="treemap-section" class="py-5 bg-dark text-light">
+        <div class="container">
+          <h2>Mescla energètica global</h2>
+
+          <!-- Filters Bar -->
+          <div id="filters-bar" class="mb-4 row g-2 align-items-center">
+            <div class="col-12 col-md-3">
+              <label class="form-label">País</label>
+              <select id="filter-country" class="form-select"></select>
+            </div>
+            <div class="col-12 col-md-3">
+              <label class="form-label">Combustible</label>
+              <select id="filter-fuel" class="form-select"></select>
+            </div>
+            <div class="col-12 col-md-3">
+              <label class="form-label">Capacitat (MW) mínima</label>
+              <input
+                id="filter-min-cap"
+                type="number"
+                class="form-control"
+                placeholder="0"
+              />
+            </div>
+            <div class="col-12 col-md-3">
+              <label class="form-label">Cerca planta</label>
+              <input
+                id="filter-search"
+                type="search"
+                class="form-control"
+                placeholder="Cerca per nom de planta"
+              />
+            </div>
+          </div>
+
+          <div id="treemap" style="height: 600px"></div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: MAP -->
+      <section id="map-section" class="py-5 bg-dark text-light">
+        <div class="container">
+          <h2>Mapa de plantes</h2>
+          <div
+            id="map"
+            style="
+              height: 600px;
+              width: 100%;
+              background: var(--card);
+              border-radius: 8px;
+              padding: 8px;
+            "
+          ></div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Libraries -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+    <!-- App scripts -->
+    <script src="js/data-loader.js?v=20260605"></script>
+    <script src="js/preprocessing.js?v=20260605"></script>
+    <script src="js/filters.js?v=20260605"></script>
+    <script src="js/hero.js?v=20260605"></script>
+    <script src="js/treemap.js?v=20260605"></script>
+    <script src="js/map.js?v=20260605"></script>
+    <script src="js/main.js?v=20260605"></script>
+  </body>
+</html>
